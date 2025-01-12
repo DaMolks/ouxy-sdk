@@ -37,8 +37,10 @@ dependencies {
 // Tâche pour créer le JAR du SDK
 task createSdkJar(type: Jar) {
     // Dépendre des tâches de compilation
-    dependsOn tasks.named('compileReleaseKotlin')
-    dependsOn tasks.named('compileReleaseJavaWithJavac')
+    // On l'exécute après l'évaluation du projet
+    afterEvaluate {
+        dependsOn android.libraryVariants.find { it.name == "release" }.javaCompileProvider
+    }
     
     // Inclure uniquement les classes compilées
     from("${buildDir}/intermediates/javac/release/classes/")
