@@ -1,56 +1,22 @@
-plugins {
-    id 'com.android.library'
-    id 'org.jetbrains.kotlin.android'
-    id 'maven-publish'
-}
-
-android {
-    namespace 'com.damolks.ouxy.module'
-    compileSdk 34
-
-    defaultConfig {
-        minSdk 26
-        targetSdk 34
+// Top-level build file
+buildscript {
+    repositories {
+        google()
+        mavenCentral()
     }
-
-    buildTypes {
-        release {
-            minifyEnabled false
-        }
-    }
-    
-    compileOptions {
-        sourceCompatibility JavaVersion.VERSION_17
-        targetCompatibility JavaVersion.VERSION_17
-    }
-    
-    kotlinOptions {
-        jvmTarget = '17'
+    dependencies {
+        classpath 'com.android.tools.build:gradle:8.2.1'
+        classpath 'org.jetbrains.kotlin:kotlin-gradle-plugin:1.9.22'
     }
 }
 
-dependencies {
-    implementation 'androidx.core:core-ktx:1.12.0'
+allprojects {
+    repositories {
+        google()
+        mavenCentral()
+    }
 }
 
-// Tâche pour créer le JAR du SDK
-task createSdkJar(type: Jar) {
-    // Inclure le code source Kotlin compilé
-    from android.sourceSets.main.java.srcDirs
-    from 'build/intermediates/javac/release/classes'
-    from 'build/tmp/kotlin-classes/release'
-    
-    // Exclure les fichiers de build
-    exclude 'BuildConfig.class'
-    exclude 'R.class'
-    exclude 'R$*.class'
-    
-    // Nom du fichier de sortie
-    archiveFileName = 'ouxy-sdk.jar'
-    destinationDirectory = file('build/libs')
-}
-
-// S'assurer que le JAR est créé après la compilation
-afterEvaluate {
-    createSdkJar.dependsOn(assembleRelease)
+task clean(type: Delete) {
+    delete rootProject.buildDir
 }
