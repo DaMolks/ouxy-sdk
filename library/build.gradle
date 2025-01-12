@@ -35,7 +35,11 @@ dependencies {
 }
 
 // Tâche pour créer le JAR du SDK
-task createSdkJar(type: Jar, dependsOn: assembleRelease) {
+task createSdkJar(type: Jar) {
+    // Dépendre des tâches de compilation
+    dependsOn tasks.named('compileReleaseKotlin')
+    dependsOn tasks.named('compileReleaseJavaWithJavac')
+    
     // Inclure uniquement les classes compilées
     from("${buildDir}/intermediates/javac/release/classes/")
     from("${buildDir}/tmp/kotlin-classes/release/")
