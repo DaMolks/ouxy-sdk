@@ -1,6 +1,7 @@
 plugins {
     id 'com.android.library'
     id 'org.jetbrains.kotlin.android'
+    id 'maven-publish'
 }
 
 android {
@@ -34,24 +35,15 @@ dependencies {
     implementation 'androidx.lifecycle:lifecycle-runtime-ktx:2.7.0'
 }
 
-// Tâche pour créer le JAR du SDK
-task createSdkJar(type: Jar) {
-    // Dépendre des tâches de compilation
-    // On l'exécute après l'évaluation du projet
-    afterEvaluate {
-        dependsOn android.libraryVariants.find { it.name == "release" }.javaCompileProvider
+afterevaluate {
+    publishing {
+        publications {
+            release(MavenPublication) {
+                from components.release
+                groupId = 'com.damolks.ouxy'
+                artifactId = 'sdk'
+                version = '1.0.0'
+            }
+        }
     }
-    
-    // Inclure uniquement les classes compilées
-    from("${buildDir}/intermediates/javac/release/classes/")
-    from("${buildDir}/tmp/kotlin-classes/release/")
-    
-    // Exclure les fichiers de build
-    exclude 'BuildConfig.class'
-    exclude 'R.class'
-    exclude 'R$*.class'
-    
-    // Nom du fichier de sortie
-    archiveFileName = 'ouxy-sdk.jar'
-    destinationDirectory = file('build/libs')
 }
