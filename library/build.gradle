@@ -35,7 +35,7 @@ dependencies {
     implementation 'androidx.lifecycle:lifecycle-runtime-ktx:2.7.0'
 }
 
-afterevaluate {
+afterEvaluate {
     publishing {
         publications {
             release(MavenPublication) {
