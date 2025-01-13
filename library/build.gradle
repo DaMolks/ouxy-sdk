@@ -28,12 +28,6 @@ android {
     kotlinOptions {
         jvmTarget = '17'
     }
-    
-    publishing {
-        singleVariant('release') {
-            withSourcesJar()
-        }
-    }
 }
 
 dependencies {
@@ -41,15 +35,14 @@ dependencies {
     implementation 'androidx.lifecycle:lifecycle-runtime-ktx:2.7.0'
 }
 
-afterEvaluate {
-    publishing {
-        publications {
-            release(MavenPublication) {
-                from components.release
-                groupId = 'com.damolks.ouxy'
-                artifactId = 'sdk'
-                version = '1.0.0'
-            }
-        }
-    }
+task createSdkJar(type: Jar) {
+    from android.sourceSets.main.java.srcDirs
+    from android.sourceSets.main.kotlin.srcDirs
+    
+    exclude 'BuildConfig.class'
+    exclude 'R.class'
+    exclude 'R$*.class'
+    
+    destinationDirectory = file("${rootDir}/releases")
+    archiveFileName = 'ouxy-sdk.jar'
 }
