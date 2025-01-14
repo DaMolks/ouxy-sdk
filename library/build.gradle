@@ -36,6 +36,13 @@ dependencies {
 }
 
 task createSdkJar(type: Jar) {
+    dependsOn 'assembleRelease'  // S'assurer que le code est compilé d'abord
+    
+    // Inclure les classes compilées
+    from("${buildDir}/intermediates/javac/release/classes")
+    from("${buildDir}/tmp/kotlin-classes/release")
+    
+    // Inclure aussi les sources si nécessaire
     from android.sourceSets.main.java.srcDirs
     from android.sourceSets.main.kotlin.srcDirs
     
