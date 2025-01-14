@@ -1,9 +1,27 @@
 package com.damolks.ouxy.module
 
+/**
+ * API de stockage fournie aux modules pour sauvegarder leurs données.
+ * Chaque module dispose de son propre espace de stockage isolé.
+ */
 interface StorageApi {
-    suspend fun readText(filename: String): String
-    suspend fun writeText(filename: String, content: String)
-    suspend fun delete(filename: String)
-    suspend fun exists(filename: String): Boolean
-    suspend fun list(): List<String>
+    /**
+     * Sauvegarde une donnée dans le stockage du module.
+     */
+    suspend fun <T> save(key: String, value: T)
+
+    /**
+     * Récupère une donnée du stockage du module.
+     */
+    suspend fun <T> get(key: String, defaultValue: T): T
+
+    /**
+     * Supprime une donnée du stockage.
+     */
+    suspend fun remove(key: String)
+
+    /**
+     * Efface toutes les données du module.
+     */
+    suspend fun clear()
 }
